@@ -18,4 +18,9 @@ class OrderStatus extends Model
     protected $fillable = [
         'title',
     ];
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
 }
