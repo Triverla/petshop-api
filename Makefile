@@ -23,3 +23,9 @@ phpinsights:
 
 phpstan:
 	docker exec -it petshop bash -c "./vendor/bin/phpstan analyse --memory-limit=2G"
+
+idehelper:
+	docker exec -it petshop bash -c "php artisan ide-helper:generate"
+
+swagger:
+	docker exec -it petshop bash -c "php artisan l5-swagger:generate"
