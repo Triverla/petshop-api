@@ -17,3 +17,9 @@ laravel:
 
 db:
 	docker exec -it Database bash
+
+phpinsights:
+	docker exec -it petshop bash -c "php artisan insights"
+
+phpstan:
+	docker exec -it petshop bash -c "./vendor/bin/phpstan analyse --memory-limit=2G"
