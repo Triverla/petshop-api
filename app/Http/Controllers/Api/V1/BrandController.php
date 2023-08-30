@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
-use App\Models\File;
+use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 
-class FileController extends Controller
+class BrandController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,7 +27,7 @@ class FileController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(File $file)
+    public function show(Brand $brand)
     {
         //
     }
@@ -34,7 +35,7 @@ class FileController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, File $file)
+    public function update(Request $request, Brand $brand)
     {
         //
     }
@@ -42,7 +43,7 @@ class FileController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(File $file)
+    public function destroy(Brand $brand)
     {
         //
     }
