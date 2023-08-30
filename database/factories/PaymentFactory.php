@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Payment>
+ * @extends Factory
  */
 class PaymentFactory extends Factory
 {
@@ -17,7 +17,8 @@ class PaymentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'type' => $this->faker->randomElement(['credit_card', 'cash_on_delivery', 'bank_transfer',]),
+            'details' => null
         ];
     }
 }
