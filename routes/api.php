@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\UserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\LogoutController;
 use App\Http\Controllers\Api\V1\Auth\Passwords\ForgotPasswordController;
@@ -27,6 +28,10 @@ Route::group(['prefix' => 'user'], function () {
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::group(['prefix' => 'admin', 'middleware' => 'is.admin'], function () {
+        Route::post('create', [UserController::class, 'createUser']);
+        Route::get('user-listing', [UserController::class, 'index']);
+        Route::put('user-edit/{user}', [UserController::class, 'update']);
+        Route::delete('user-delete/{user}', [UserController::class, 'destroy']);
         Route::post('logout', LogoutController::class);
     });
 
