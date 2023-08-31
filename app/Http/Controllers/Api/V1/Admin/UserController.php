@@ -27,7 +27,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="admin/user-listing",
+     *     path="api/v1/dmin/user-listing",
      *     tags={"Admin"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
@@ -146,7 +146,7 @@ class UserController extends Controller
 
     /**
      * @OA\Put(
-     *     path="admin/user-listing/{uuid}",
+     *     path="api/v1/admin/user-listing/{uuid}",
      *     tags={"Admin"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
@@ -240,7 +240,7 @@ class UserController extends Controller
 
     /**
      * @OA\Post(
-     *     path="admin/create",
+     *     path="api/v1/admin/create",
      *     tags={"Admin"},
      *     @OA\RequestBody(
      *         required=true,
@@ -343,7 +343,7 @@ class UserController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="admin/user-listing/{uuid}",
+     *     path="api/v1/admin/user-listing/{uuid}",
      *     tags={"Admin"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(

@@ -84,7 +84,7 @@ class CategoryController extends Controller
 
     /**
      * @OA\Post(
-     *     path="category",
+     *     path="category/create",
      *     tags={"Categories"},
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(

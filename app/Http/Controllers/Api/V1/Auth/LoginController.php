@@ -20,7 +20,7 @@ class LoginController extends Controller
 
     /**
      * @OA\Post(
-     * path="admin/login",
+     * path="api/v1/admin/login",
      * summary="Sign in",
      * description="Login by email, password, both user and admin uses this endpoint so te behavior will change just on the route name",
      * operationId="authLogin",

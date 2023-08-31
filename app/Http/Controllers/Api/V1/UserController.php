@@ -26,7 +26,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="user",
+     *     path="api/v1/user",
      *     tags={"User"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(
@@ -60,7 +60,7 @@ class UserController extends Controller
 
     /**
      * @OA\Post(
-     *     path="user/create",
+     *     path="api/v1/user/create",
      *     tags={"User"},
      *     @OA\RequestBody(
      *         required=true,
@@ -161,7 +161,7 @@ class UserController extends Controller
 
     /**
      * @OA\Put(
-     *     path="user/edit",
+     *     path="api/v1/user/edit",
      *     tags={"User"},
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
@@ -247,7 +247,7 @@ class UserController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="user",
+     *     path="api/v1/user",
      *     tags={"User"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(
