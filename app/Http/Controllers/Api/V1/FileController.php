@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
-use App\Models\Payment;
+use App\Http\Controllers\Controller;
+use App\Models\File;
 use Illuminate\Http\Request;
 
-class PaymentController extends Controller
+class FileController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,7 +27,7 @@ class PaymentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Payment $payment)
+    public function show(File $file)
     {
         //
     }
@@ -34,7 +35,7 @@ class PaymentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Payment $payment)
+    public function update(Request $request, File $file)
     {
         //
     }
@@ -42,7 +43,7 @@ class PaymentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Payment $payment)
+    public function destroy(File $file)
     {
         //
     }

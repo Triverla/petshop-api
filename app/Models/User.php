@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Helpers\Token;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -52,5 +54,20 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function storeJWT(): array
+    {
+        $token = Token::encodeJwt([
+            'user_id' => $this->uuid,
+            'iss' => config('app.url'),
+            'exp' => Carbon::now()->addMinutes(config('petshop.jwt_max_lifetime'))->getTimestamp(),
+        ]);
 
+        $tokenExpiry = Carbon::createFromTimestamp(Token::decodeJwt($token)->exp);
+
+        return [
+            'token' => $token,
+            'token_expiry_text' => $tokenExpiry->diffForHumans(),
+            'token_expiry_seconds' => $tokenExpiry->diffInSeconds(),
+        ];
+    }
 }

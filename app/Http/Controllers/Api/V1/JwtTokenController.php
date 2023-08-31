@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
-use App\Models\OrderStatus;
+use App\Http\Controllers\Controller;
+use App\Models\JwtToken;
 use Illuminate\Http\Request;
 
-class OrderStatusController extends Controller
+class JwtTokenController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,7 +27,7 @@ class OrderStatusController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(OrderStatus $orderStatus)
+    public function show(JwtToken $jwtToken)
     {
         //
     }
@@ -34,7 +35,7 @@ class OrderStatusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, OrderStatus $orderStatus)
+    public function update(Request $request, JwtToken $jwtToken)
     {
         //
     }
@@ -42,7 +43,7 @@ class OrderStatusController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(OrderStatus $orderStatus)
+    public function destroy(JwtToken $jwtToken)
     {
         //
     }

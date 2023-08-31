@@ -29,3 +29,6 @@ idehelper:
 
 swagger:
 	docker exec -it petshop bash -c "php artisan l5-swagger:generate"
+
+test:
+	docker exec -it petshop bash -c "php artisan test"
