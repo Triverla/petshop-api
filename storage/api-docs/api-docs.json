@@ -14,18 +14,18 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8000/api/v1/",
+            "url": "http://localhost:8000/",
             "description": "Demo API/V1 Server for challenge"
         }
     ],
     "paths": {
         "/api/v1": {},
-        "admin/user-listing": {
+        "api/v1/dmin/user-listing": {
             "get": {
                 "tags": [
                     "Admin"
                 ],
-                "operationId": "7d799b2393bfaac2385596173675c930",
+                "operationId": "d91c1ddb5dde27c10e1d6301b0ebd3c0",
                 "parameters": [
                     {
                         "name": "page",
@@ -140,12 +140,12 @@
                 ]
             }
         },
-        "admin/user-listing/{uuid}": {
+        "api/v1/admin/user-listing/{uuid}": {
             "put": {
                 "tags": [
                     "Admin"
                 ],
-                "operationId": "e340908d2689a19e0b8267ced0fad24a",
+                "operationId": "35b97c012c7697cb47f17034173efdc2",
                 "parameters": [
                     {
                         "name": "uuid",
@@ -240,7 +240,7 @@
                 "tags": [
                     "Admin"
                 ],
-                "operationId": "46bb4c32039dba02d119f0533596d972",
+                "operationId": "f9ac5d1ef466271e8566ef0a542270cd",
                 "parameters": [
                     {
                         "name": "uuid",
@@ -276,12 +276,12 @@
                 ]
             }
         },
-        "admin/create": {
+        "api/v1/admin/create": {
             "post": {
                 "tags": [
                     "Admin"
                 ],
-                "operationId": "2174751ac3d9dd66357d8ebf64fc3198",
+                "operationId": "408f115e227105cdb5b87e51111c84bd",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -357,7 +357,7 @@
                 }
             }
         },
-        "admin/login": {
+        "api/v1/admin/login": {
             "post": {
                 "tags": [
                     "Admin"
@@ -415,12 +415,12 @@
                 }
             }
         },
-        "user/logout": {
+        "api/v1/user/logout": {
             "get": {
                 "tags": [
                     "User"
                 ],
-                "operationId": "96e984bf3b8b9e7bc0f5c849a2095bbb",
+                "operationId": "6919fd5e59e71681c0d9d6f268231268",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -445,12 +445,12 @@
                 ]
             }
         },
-        "user/forgot-password": {
+        "api/v1/user/forgot-password": {
             "post": {
                 "tags": [
                     "User"
                 ],
-                "operationId": "9f6b492d4c46475a167fa40ec5f6a99e",
+                "operationId": "1273f0b3c8eeb415bdb903a084c9ec3f",
                 "parameters": [
                     {
                         "name": "email",
@@ -481,12 +481,12 @@
                 }
             }
         },
-        "user/reset-password-token": {
+        "api/v1/user/reset-password-token": {
             "post": {
                 "tags": [
                     "User"
                 ],
-                "operationId": "97461e9ad3ced32cb8ce13ec57de0d4d",
+                "operationId": "4a2e8219344aceee8bc87ddfdf525bf1",
                 "parameters": [
                     {
                         "name": "token",
@@ -535,12 +535,256 @@
                 }
             }
         },
-        "user": {
+        "categories": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "operationId": "184f8a413746bb4c41021bf36af80696",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sortBy",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "desc",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Page not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "category": {
+            "post": {
+                "tags": [
+                    "Categories"
+                ],
+                "operationId": "90259a303f8dead0daa425fc6c3f67ad",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "required": [
+                                    "title"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "description": "title",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Page not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "category/{uuid}": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "operationId": "618623fa986727ba3d7b3f6e80221cb4",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID parameter",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Page not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Categories"
+                ],
+                "operationId": "f7bb2be5770a1f7e0c52dd75aba969ae",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID parameter",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "required": [
+                                    "title"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "description": "User Title",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Page not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Categories"
+                ],
+                "operationId": "93889f5e54cbc406b25ed77592a92fa1",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID parameter",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Page not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "api/v1/user": {
             "get": {
                 "tags": [
                     "User"
                 ],
-                "operationId": "629c0bfd4c5a3c43e2691d561f7741eb",
+                "operationId": "22c34993489251cc5e1fa083f3ef2117",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -568,7 +812,7 @@
                 "tags": [
                     "User"
                 ],
-                "operationId": "8fab89e7ff926473e500d1d1e2405515",
+                "operationId": "6226619c772d963061a6ca157bf027e8",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -593,12 +837,12 @@
                 ]
             }
         },
-        "user/create": {
+        "api/v1/user/create": {
             "post": {
                 "tags": [
                     "User"
                 ],
-                "operationId": "b361818b6a3bf8c7c35b9cca4d0a9755",
+                "operationId": "ca76b4b3a4b3e1348ffd98b3cb6c89ba",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -674,12 +918,12 @@
                 }
             }
         },
-        "user/edit": {
+        "api/v1/user/edit": {
             "put": {
                 "tags": [
                     "User"
                 ],
-                "operationId": "8b1d508a26e865b720f9d77c12ebb8b8",
+                "operationId": "47dac99dd36c5063ed2403a57f926a45",
                 "requestBody": {
                     "required": true,
                     "content": {

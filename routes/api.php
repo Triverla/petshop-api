@@ -45,7 +45,8 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::delete('', [NormalUserController::class, 'destroy']);
     });
 
-    Route::apiResource('category', CategoryController::class)->except(['index', 'show'])->middleware('is.admin');
+    Route::apiResource('category', CategoryController::class)->except(['index', 'show', 'store'])->middleware('is.admin');
+    Route::post('category/create', [CategoryController::class, 'store'])->middleware('is.admin');
 });
 
 Route::get('categories', [CategoryController::class, 'index']);

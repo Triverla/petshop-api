@@ -12,7 +12,7 @@ class LogoutController extends Controller
 
     /**
      * @OA\Get(
-     *     path="user/logout",
+     *     path="api/v1/user/logout",
      *     tags={"User"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(
