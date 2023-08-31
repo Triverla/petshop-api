@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\Auth\LogoutController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('admin/login', LoginController::class);
 Route::post('user/login', LoginController::class);
+
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::group(['prefix' => 'admin', 'middleware' => 'is.admin'], function () {
+        Route::post('logout', LogoutController::class);
+    });
+
+    Route::group(['prefix' => 'user'], function () {
+        Route::post('logout', LogoutController::class);
+    });
+});

@@ -3,19 +3,14 @@
 namespace App\Services\Api\V1\Auth;
 
 use App\Helpers\Token;
-use App\Http\Requests\Api\V1\Auth\LoginRequest;
 use App\Models\JwtToken;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class AuthService
 {
 
-    /**
-     * @throws \Exception
-     */
     public function login(array $data)
     {
         if (!Auth::attempt($data)) {
@@ -43,10 +38,7 @@ class AuthService
         ];
     }
 
-    /**
-     * @throws \Exception
-     */
-    protected function storeJWT(string $token)
+    public function storeJWT(string $token)
     {
         $tokenExpiry = Carbon::createFromTimestamp(Token::decodeJwt($token)->exp);
         $userId = auth()->user()->uuid;
