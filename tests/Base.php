@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class Base extends TestCase
 {
-
     public User $user;
     public User $admin;
     public User $marketingUser;
@@ -29,20 +28,20 @@ class Base extends TestCase
 
         $this->buckHillAdmin = User::factory()->create([
             'first_name' => 'BuckHillAdmin',
-            'email' => 'admin@buckhill.co.uk',
+            'email' => 'test@buckhill.co.uk',
             'password' => Hash::make('admin'),
             'is_admin' => true,
         ]);
 
         $payload = [
             'user_id' => $this->buckHillAdmin->uuid,
-            'exp' => Carbon::now()->addMinutes(config('app.jwt_max_exp_minutes'))->getTimestamp(),
+            'exp' => Carbon::now()->addMinutes(config('petshop.jwt_max_lifetime'))->getTimestamp(),
         ];
         $this->jwtAdminToken = $this->createJWTToken($payload);
 
         $payload = [
             'user_id' => $this->user->uuid,
-            'exp' => Carbon::now()->addMinutes(config('app.jwt_max_exp_minutes'))->getTimestamp(),
+            'exp' => Carbon::now()->addMinutes(config('petshop.jwt_max_lifetime'))->getTimestamp(),
         ];
         $this->jwtUserToken = $this->createJWTToken($payload);
     }

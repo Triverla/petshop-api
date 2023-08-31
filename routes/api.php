@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\UserController;
+use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\UserController as NormalUserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\LogoutController;
@@ -43,4 +44,9 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::put('edit', [NormalUserController::class, 'edit']);
         Route::delete('', [NormalUserController::class, 'destroy']);
     });
+
+    Route::apiResource('category', CategoryController::class)->except(['index', 'show'])->middleware('is.admin');
 });
+
+Route::get('categories', [CategoryController::class, 'index']);
+Route::get('category/{category}', [CategoryController::class, 'show']);
