@@ -23,7 +23,6 @@ class LoginController extends Controller
 
             return response()->json($data);
         } catch (Exception $e) {
-            dd($e->getMessage());
             throw new Exception('Unsuccessful Login Attempt');
         }
     }

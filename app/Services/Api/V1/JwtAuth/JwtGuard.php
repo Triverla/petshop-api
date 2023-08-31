@@ -83,7 +83,7 @@ class JwtGuard implements Guard
         $token = $this->validateToken($requestToken);
 
         if (is_null($token)) {
-            return $requestToken;
+            abort(Response::HTTP_BAD_REQUEST, 'Invalid token. Kindly login');
         }
 
         $this->enforceShortLivedTokens($token);
