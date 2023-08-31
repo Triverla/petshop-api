@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Services\Api\V1\Auth;
+
+use App\Helpers\Token;
+use App\Http\Requests\Api\V1\Auth\LoginRequest;
+use App\Models\JwtToken;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
+
+class AuthService
+{
+
+    /**
+     * @throws \Exception
+     */
+    public function login(array $data)
+    {
+        if (!Auth::attempt($data)) {
+            throw new Exception('Invalid login credentials');
+        }
+
+        $user = Auth::guard()->user();
+
+        $device = substr(request()->userAgent() ?? '', 0, 255);
+
+        $token = Token::encodeJwt([
+            'user_id' => $user->uuid,
+            'device' => $device,
+            'iss' => config('app.url'),
+            'exp' => Carbon::now()->addMinutes(config('petshop.jwt_max_lifetime'))->getTimestamp(),
+        ]);
+        $tokenExpiry = Carbon::createFromTimestamp(Token::decodeJwt($token)->exp);
+        $storeJWT = $this->storeJWT($token);
+
+        return [
+            'unique_id' => $storeJWT->unique_id,
+            'token' => $token,
+            'token_expiry_text' => $tokenExpiry->diffForHumans(),
+            'token_expiry_seconds' => $tokenExpiry->diffInSeconds(),
+        ];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    protected function storeJWT(string $token)
+    {
+        $tokenExpiry = Carbon::createFromTimestamp(Token::decodeJwt($token)->exp);
+        $userId = auth()->user()->uuid;
+
+        JwtToken::where('user_id', $userId)->delete();
+
+        return JwtToken::create([
+            'user_id' => $userId,
+            'token_title' => 'auth',
+            'restrictions' => '{"restrictions": "*"}',
+            'permissions' => '{"permissions": "*"}',
+            'expires_at' => $tokenExpiry,
+            'last_used_at' => Carbon::now(),
+            'refreshed_at' => Carbon::now(),
+        ]);
+    }
+}
