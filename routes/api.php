@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\LogoutController;
+use App\Http\Controllers\Api\V1\Auth\Passwords\ForgotPasswordController;
+use App\Http\Controllers\Api\V1\Auth\Passwords\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +18,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('admin/login', LoginController::class);
-Route::post('user/login', LoginController::class);
+
+Route::group(['prefix' => 'user'], function () {
+    Route::post('login', LoginController::class);
+    Route::post('forgot-password', ForgotPasswordController::class);
+    Route::post('reset-password-token', ResetPasswordController::class);
+});
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::group(['prefix' => 'admin', 'middleware' => 'is.admin'], function () {
