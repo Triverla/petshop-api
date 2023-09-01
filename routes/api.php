@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Admin\UserController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\UserController as NormalUserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\LogoutController;
@@ -51,3 +52,14 @@ Route::group(['middleware' => ['auth:api']], function () {
 
 Route::get('categories', [CategoryController::class, 'index']);
 Route::get('category/{category}', [CategoryController::class, 'show']);
+
+Route::group(['prefix' => 'order'], function () {
+    Route::apiResource('', OrderController::class)->except('store', 'index');
+    Route::post('create', [OrderController::class, 'store']);
+});
+
+Route::prefix('orders')->group(function () {
+    Route::get('', [OrderController::class, 'index']);
+    Route::get('shipment-locator', [OrderController::class, 'shipmentLocator']);
+    Route::get('dashboard', [OrderController::class, 'dashboard']);
+});
