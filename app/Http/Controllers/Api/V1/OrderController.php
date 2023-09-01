@@ -8,7 +8,9 @@ use App\Http\Filters\OrderFilter;
 use App\Http\Requests\Api\V1\Order\CreateOrderRequest;
 use App\Http\Requests\Api\V1\Order\ShipmentLocatorRequest;
 use App\Http\Requests\Api\V1\Order\UpdateOrderRequest;
+use App\Http\Resources\OrderDashboardResource;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\OrderShipmentLocatorResource;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\Payment;
@@ -518,7 +520,7 @@ class OrderController extends Controller
 
         $data = $paginator->paginateData($request, $query);
 
-        return response()->json(OrderResource::collection($data)->response()->getData());
+        return response()->json(OrderShipmentLocatorResource::collection($data)->response()->getData());
     }
 
     /**
@@ -585,11 +587,30 @@ class OrderController extends Controller
      */
     public function dashboard(Request $request, Paginator $paginator, OrderFilter $filter): JsonResponse
     {
-        $query = Order::query()->filter($filter);
+        $query = Order::query()->filter($filter)->with('orderStatus');
+
+        // Calculate statistics
+        $totalOrders = $query->whereHas('orderStatus', function ($query) {
+            $query->where('title', '!=', 'cancelled');
+        })->count();
+        $totalEarnings = $query->whereHas('orderStatus', function ($query) {
+            $query->where('title', '!=', 'cancelled');
+        })->sum('amount');
+        $potentialEarnings = $query->whereHas('orderStatus', function ($query) {
+            $query->where('title', 'paid');
+        })->sum('amount');
 
         $data = $paginator->paginateData($request, $query);
 
-        return response()->json(OrderResource::collection($data)->response()->getData());
+        $statistics = [
+            'total_orders' => $totalOrders,
+            'total_earnings' => $totalEarnings,
+            'potential_earnings' => $potentialEarnings,
+        ];
+
+        $responseData = array_merge(OrderDashboardResource::collection($data)->response()->getData(true), $statistics);
+
+        return response()->json($responseData);
     }
 
 }

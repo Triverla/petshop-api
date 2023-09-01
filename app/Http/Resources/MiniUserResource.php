@@ -3,12 +3,13 @@
 namespace App\Http\Resources;
 
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderResource extends JsonResource
+class MiniUserResource extends JsonResource
 {
-    public function __construct(Order $resource)
+    public function __construct(User $resource)
     {
         parent::__construct($resource);
     }
@@ -19,13 +20,9 @@ class OrderResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'products' => json_decode($this->resource->products),
-            'address' => json_decode($this->resource->address),
-            'user' => new MiniUserResource($this->resource->user),
-            'amount' => $this->resource->amount,
             'uuid' => $this->resource->uuid,
-            'shipped_at' => $this->resource->shipped_at
+            'full_name' => $this->resource->fullName,
+            'email' => $this->resource->email
         ];
     }
-
 }
