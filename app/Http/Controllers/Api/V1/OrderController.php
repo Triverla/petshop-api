@@ -17,8 +17,11 @@ use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
 use Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use OpenApi\Annotations as OA;
@@ -593,10 +596,10 @@ class OrderController extends Controller
         $totalOrders = $query->whereHas('orderStatus', function ($query) {
             $query->where('title', '!=', 'cancelled');
         })->count();
-        $totalEarnings = $query->whereHas('orderStatus', function ($query) {
-            $query->where('title', '!=', 'cancelled');
-        })->sum('amount');
         $potentialEarnings = $query->whereHas('orderStatus', function ($query) {
+            $query->whereNotIn('title', ['cancelled', 'paid']);
+        })->sum('amount');
+        $totalEarnings = $query->whereHas('orderStatus', function ($query) {
             $query->where('title', 'paid');
         })->sum('amount');
 
@@ -611,6 +614,82 @@ class OrderController extends Controller
         $responseData = array_merge(OrderDashboardResource::collection($data)->response()->getData(true), $statistics);
 
         return response()->json($responseData);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="api/v1/orders/{uuid}/download",
+     *     tags={"Orders"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="uuid",
+     *         in="path",
+     *         description="UUID parameter",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="OK"
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Page not found"
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Unprocessable Entity"
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Internal server error"
+     *     )
+     * )
+     */
+    public function download(Order $order): Response
+    {
+        $products = json_decode($order->products, true);
+
+        $total = 0;
+        $subTotal = 0;
+
+        $productsAndQuantity = array_map(function ($product) use (&$total, &$subTotal) {
+            $productModel = Product::where('uuid', $product['product'])->first();
+
+            $subtotalProduct = $productModel->price * $product['quantity'];
+
+            $total += $subtotalProduct;
+            $subTotal += $subtotalProduct;
+
+            return [
+                'product' => $productModel,
+                'quantity' => $product['quantity'],
+                'subtotal' => $subtotalProduct,
+            ];
+        }, $products);
+
+
+        $data = [
+            'payment' => $order->payment,
+            'paymentType' => strtoupper(str_replace('_', ' ', $order->payment->type)),
+            'user' => $order->user,
+            'productsAndQuantity' => $productsAndQuantity,
+            'address' => json_decode($order->address),
+            'amount' => $order->amount,
+            'uuid' => $order->uuid,
+            'subtotal' => $subTotal,
+            'total' => $total +$order->delivery_fee,
+            'deliveryFee' => $order->delivery_fee,
+            'created' => Carbon::parse($order->created_at)->format('d F, Y')
+        ];
+
+        $pdf = Pdf::loadView('pdf.order', $data);
+
+        return $pdf->download("{$order->uuid}.pdf");
     }
 
 }
