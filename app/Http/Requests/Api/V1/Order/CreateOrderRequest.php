@@ -36,7 +36,7 @@ class CreateOrderRequest extends FormRequest
             ],
             'address' => [
                 'required',
-                new AddressRule,
+                new AddressRule(),
             ],
             'amount' => 'required|numeric',
         ];

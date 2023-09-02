@@ -19,7 +19,6 @@ use Throwable;
 
 class UserController extends Controller
 {
-
     public function __construct(protected readonly AuthService $authService)
     {
     }

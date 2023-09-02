@@ -7,10 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderDashboardResource extends JsonResource
-{public function __construct(Order $resource)
 {
-    parent::__construct($resource);
-}
+    public function __construct(Order $resource)
+    {
+        parent::__construct($resource);
+    }
 
     /**
      * @return array<string, array<string>|string>
@@ -30,7 +31,7 @@ class OrderDashboardResource extends JsonResource
     private function getOrderedProducts(array $products): int
     {
         $count = 0;
-        foreach ($products as $product){
+        foreach ($products as $product) {
             $count += $product->quantity;
         }
 

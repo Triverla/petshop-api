@@ -22,7 +22,7 @@ class LoginController extends Controller
      * @OA\Post(
      * path="api/v1/admin/login",
      * summary="Sign in",
-     * description="Login by email, password, both user and admin uses this endpoint so te behavior will change just on the route name",
+     * description="Login by email, password",
      * operationId="authLogin",
      * tags={"Admin"},
      * @OA\RequestBody(
@@ -39,7 +39,7 @@ class LoginController extends Controller
      *    response=422,
      *    description="Invalid credentials response",
      *    @OA\JsonContent(
-     *       @OA\Property(property="message", type="string", example="Invalid email address or password. Please try again")
+     *       @OA\Property(property="message", type="string", example="Invalid email address or password.")
      *        )
      *     )
      * )

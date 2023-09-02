@@ -24,7 +24,7 @@ class OrderResource extends JsonResource
             'user' => new MiniUserResource($this->resource->user),
             'amount' => $this->resource->amount,
             'uuid' => $this->resource->uuid,
-            'created_at' => $this->resource->created_at
+            'created_at' => $this->resource->created_at,
         ];
     }
 
