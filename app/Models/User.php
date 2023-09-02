@@ -7,6 +7,7 @@ use App\Helpers\Token;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -69,5 +70,15 @@ class User extends Authenticatable
             'token_expiry_text' => $tokenExpiry->diffForHumans(),
             'token_expiry_seconds' => $tokenExpiry->diffInSeconds(),
         ];
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'user_id');
+    }
+
+    public function getFullNameAttribute(): string
+    {
+        return "$this->first_name $this->last_name";
     }
 }

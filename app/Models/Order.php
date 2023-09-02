@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ class Order extends Model
 {
     use HasFactory;
     use HasUuids;
+    use Filterable;
 
     public $incrementing = false;
     protected $primaryKey = 'uuid';
@@ -30,7 +32,7 @@ class Order extends Model
         'address' => 'json',
         'amount' => 'float',
         'delivery_fee' => 'float',
-        'shipped_at' => 'timestamp'
+        'shipped_at' => 'datetime'
     ];
 
     public function orderStatus(): BelongsTo
@@ -41,5 +43,10 @@ class Order extends Model
     public function payment(): BelongsTo
     {
         return $this->belongsTo(Payment::class, 'payment_id', 'uuid');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id', 'uuid');
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Admin\UserController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\UserController as NormalUserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\LogoutController;
@@ -47,7 +48,24 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::apiResource('category', CategoryController::class)->except(['index', 'show', 'store'])->middleware('is.admin');
     Route::post('category/create', [CategoryController::class, 'store'])->middleware('is.admin');
+
+    //ORDERS
+    Route::group(['prefix' => 'orders', 'middleware' => 'is.admin'], function () {
+        Route::get('', [OrderController::class, 'index']);
+        Route::get('shipment-locator', [OrderController::class, 'shipmentLocator']);
+        Route::get('dashboard', [OrderController::class, 'dashboard']);
+    });
+
+    Route::apiResource('order', OrderController::class)->except('store', 'index');
+    Route::group(['prefix' => 'order'], function () {
+        Route::post('create', [OrderController::class, 'store']);
+        Route::get(
+            '{order}/download',
+            [OrderController::class, 'download']
+        );
+    });
 });
 
 Route::get('categories', [CategoryController::class, 'index']);
 Route::get('category/{category}', [CategoryController::class, 'show']);
+
