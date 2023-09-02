@@ -26,15 +26,14 @@ final class JsonRule implements ValidationRule
         mixed $value,
         Closure $fail
     ): void {
-        $values = (is_array($value)) ? $value :  json_decode($value, true);
+        $values = is_array($value) ? $value : json_decode($value, true);
 
-        if ( ! is_array($values)) {
+        if (!is_array($values)) {
             $fail($attribute . ' must be valid JSON');
 
             return;
         }
         foreach ($values as $val) {
-            logger($val);
             if (array_diff(array_keys($this->rules), array_keys($val))) {
                 $errors = implode(',', array_keys($this->rules));
                 $fail($attribute . ' is not correct.' . $errors);

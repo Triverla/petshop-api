@@ -23,13 +23,8 @@ class JwtGuard implements Guard
 {
     use GuardHelpers, Macroable;
 
-    /**
-     * The request instance.
-     *
-     * @var Request
-     */
     protected Request $request;
-    private $token;
+    private string $token;
 
     /**
      * Create a new authentication guard.
@@ -159,7 +154,7 @@ class JwtGuard implements Guard
         }
     }
 
-    private function enforceShortLivedTokens($token)
+    private function enforceShortLivedTokens(string $token)
     {
         $maxMinutes = config('petshop.jwt_max_lifetime');
         if (empty($token->exp)) {

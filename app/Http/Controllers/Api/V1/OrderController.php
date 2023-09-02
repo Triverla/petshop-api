@@ -247,7 +247,7 @@ class OrderController extends Controller
      */
     public function show(Order $order): JsonResponse
     {
-        if(!Auth::user()->is_admin && ($order->user_id !== Auth::id())){
+        if (!Auth::user()->is_admin && ($order->user_id !== Auth::id())) {
             abort(404, "Order not found");
         }
 
@@ -521,8 +521,11 @@ class OrderController extends Controller
      *     )
      * )
      */
-    public function shipmentLocator(ShipmentLocatorRequest $request, Paginator $paginator, OrderFilter $filter): JsonResponse
-    {
+    public function shipmentLocator(
+        ShipmentLocatorRequest $request,
+        Paginator $paginator,
+        OrderFilter $filter
+    ): JsonResponse {
         $query = Order::query()->filter($filter)->whereNotNull('shipped_at');
 
         $data = $paginator->paginateData($request, $query);
@@ -686,7 +689,7 @@ class OrderController extends Controller
             'amount' => $order->amount,
             'uuid' => $order->uuid,
             'subtotal' => $subTotal,
-            'total' => $total +$order->delivery_fee,
+            'total' => $total + $order->delivery_fee,
             'deliveryFee' => $order->delivery_fee,
             'created' => Carbon::parse($order->created_at)->format('d F, Y')
         ];

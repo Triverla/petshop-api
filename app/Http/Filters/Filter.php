@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -43,10 +42,9 @@ abstract class Filter
     /**
      * @param string $name
      * @param array $arguments
-     *
-     * @return mixed
+     * @return void
      */
-    public function __call($name, $arguments)
+    public function __call(string $name, array $arguments)
     {
         if (method_exists($this->builder, $name)) {
             return call_user_func_array([$this->builder, $name], $arguments);
@@ -104,7 +102,10 @@ abstract class Filter
         /** @var ReflectionParameter $parameter */
         $parameter = Arr::first($method->getParameters());
 
-        return $value ? $method->getNumberOfParameters() > 0 :
-            null === $parameter || $parameter->isDefaultValueAvailable();
+        if ($value) {
+            return $method->getNumberOfParameters() > 0;
+        }
+
+        return null === $parameter || $parameter->isDefaultValueAvailable();
     }
 }

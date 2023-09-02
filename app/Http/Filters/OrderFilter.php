@@ -1,14 +1,9 @@
 <?php
 
-
 namespace App\Http\Filters;
 
-
-use App\Models\ClientWrapper;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Schema;
 
 class OrderFilter extends Filter
 {
@@ -25,8 +20,7 @@ class OrderFilter extends Filter
             );
         }
 
-
-        return $this->builder->whereDate('created_at', $value['from'] ?? $value['to']);;
+        return $this->builder->whereDate('created_at', $value['from'] ?? $value['to']);
     }
 
     /**
@@ -34,7 +28,7 @@ class OrderFilter extends Filter
      * @param string|null $value
      * @return Builder
      */
-    public function fixRange(string $value = null): Builder
+    public function fixRange(?string $value = null): Builder
     {
         if (isset($value) && $value === 'today') {
             return $this->builder->whereDate('created_at', Carbon::today());
@@ -61,7 +55,7 @@ class OrderFilter extends Filter
      * @param string|null $value
      * @return Builder
      */
-    public function orderUuid(string $value = null): Builder
+    public function orderUuid(?string $value = null): Builder
     {
         if (isset($value)) {
             return $this->builder->where('uuid', $value);
@@ -76,7 +70,7 @@ class OrderFilter extends Filter
      * @param string|null $value
      * @return Builder
      */
-    public function customerUuid(string $value = null): Builder
+    public function customerUuid(?string $value = null): Builder
     {
         if (isset($value)) {
             return $this->builder->where('user_id', $value);

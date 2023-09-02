@@ -23,13 +23,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('admin/login', LoginController::class);
 
-Route::group(['prefix' => 'user'], function () {
+Route::group(['prefix' => 'user'], function (): void {
     Route::post('login', LoginController::class);
     Route::post('forgot-password', ForgotPasswordController::class);
     Route::post('reset-password-token', ResetPasswordController::class);
 });
 
-Route::group(['middleware' => ['auth:api']], function () {
+Route::group(['middleware' => ['auth:api']], function (): void {
     Route::group(['prefix' => 'admin', 'middleware' => 'is.admin'], function () {
         Route::post('create', [UserController::class, 'createUser']);
         Route::get('user-listing', [UserController::class, 'index']);
@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::post('logout', LogoutController::class);
     });
 
-    Route::group(['prefix' => 'user'], function () {
+    Route::group(['prefix' => 'user'], function (): void {
         Route::post('create', [NormalUserController::class, 'createUser']);
         Route::post('logout', LogoutController::class);
         Route::get('', [NormalUserController::class, 'index']);
@@ -50,14 +50,14 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('category/create', [CategoryController::class, 'store'])->middleware('is.admin');
 
     //ORDERS
-    Route::group(['prefix' => 'orders', 'middleware' => 'is.admin'], function () {
+    Route::group(['prefix' => 'orders', 'middleware' => 'is.admin'], function (): void {
         Route::get('', [OrderController::class, 'index']);
         Route::get('shipment-locator', [OrderController::class, 'shipmentLocator']);
         Route::get('dashboard', [OrderController::class, 'dashboard']);
     });
 
     Route::apiResource('order', OrderController::class)->except('store', 'index');
-    Route::group(['prefix' => 'order'], function () {
+    Route::group(['prefix' => 'order'], function (): void {
         Route::post('create', [OrderController::class, 'store']);
         Route::get(
             '{order}/download',
