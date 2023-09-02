@@ -30,7 +30,7 @@ Route::group(['prefix' => 'user'], function (): void {
 });
 
 Route::group(['middleware' => ['auth:api']], function (): void {
-    Route::group(['prefix' => 'admin', 'middleware' => 'is.admin'], function () {
+    Route::group(['prefix' => 'admin', 'middleware' => 'is.admin'], function (): void {
         Route::post('create', [UserController::class, 'createUser']);
         Route::get('user-listing', [UserController::class, 'index']);
         Route::put('user-edit/{user}', [UserController::class, 'update']);
@@ -46,7 +46,8 @@ Route::group(['middleware' => ['auth:api']], function (): void {
         Route::delete('', [NormalUserController::class, 'destroy']);
     });
 
-    Route::apiResource('category', CategoryController::class)->except(['index', 'show', 'store'])->middleware('is.admin');
+    Route::apiResource('category', CategoryController::class)->except(['index', 'show', 'store'])
+        ->middleware('is.admin');
     Route::post('category/create', [CategoryController::class, 'store'])->middleware('is.admin');
 
     //ORDERS
@@ -68,4 +69,3 @@ Route::group(['middleware' => ['auth:api']], function (): void {
 
 Route::get('categories', [CategoryController::class, 'index']);
 Route::get('category/{category}', [CategoryController::class, 'show']);
-

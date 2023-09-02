@@ -666,7 +666,6 @@ class OrderController extends Controller
 
         $productsAndQuantity = array_map(function ($product) use (&$total, &$subTotal) {
             $productModel = Product::where('uuid', $product['product'])->first();
-
             $subtotalProduct = $productModel->price * $product['quantity'];
 
             $total += $subtotalProduct;
@@ -679,19 +678,14 @@ class OrderController extends Controller
             ];
         }, $products);
 
-
         $data = [
-            'payment' => $order->payment,
+            'order' => $order,
             'paymentType' => strtoupper(str_replace('_', ' ', $order->payment->type)),
-            'user' => $order->user,
             'productsAndQuantity' => $productsAndQuantity,
             'address' => json_decode($order->address),
-            'amount' => $order->amount,
-            'uuid' => $order->uuid,
             'subtotal' => $subTotal,
             'total' => $total + $order->delivery_fee,
-            'deliveryFee' => $order->delivery_fee,
-            'created' => Carbon::parse($order->created_at)->format('d F, Y')
+            'created' => Carbon::parse($order->created_at)->format('d F, Y'),
         ];
 
         $pdf = Pdf::loadView('pdf.order', $data);

@@ -32,7 +32,7 @@ class Order extends Model
         'address' => 'json',
         'amount' => 'float',
         'delivery_fee' => 'float',
-        'shipped_at' => 'datetime'
+        'shipped_at' => 'datetime',
     ];
 
     public function orderStatus(): BelongsTo

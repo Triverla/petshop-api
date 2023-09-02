@@ -30,14 +30,14 @@
 </head>
 <body>
 <h2 style="text-align: center">Petshop</h2>
-<p style="text-align: right">Invoice No: {{$payment->uuid}}</p>
+<p style="text-align: right">Invoice No: {{$order->payment->uuid}}</p>
 <p style="text-align: right">{{$created}}</p>
 <br>
 <div class="table-wrapper">
-            <p>Customer Name: {{$user->fullName}}</p>
-            <p>Email: {{$user->email}}</p>
-            <p>Phone No: {{$user->phone_number}}</p>
-            <p>Address: {{$user->address}}</p>
+            <p>Customer Name: {{$order->user->fullName}}</p>
+            <p>Email: {{$order->user->email}}</p>
+            <p>Phone No: {{$order->user->phone_number}}</p>
+            <p>Address: {{$order->user->address}}</p>
 </div>
 
 <div class="table-wrapper">
@@ -78,7 +78,7 @@
         <tr>
             <td colspan="3" class="no-border"></td>
             <td>Delivery Fee:</td>
-            <td>{{$deliveryFee}}</td>
+            <td>{{$order->delivery_fee}}</td>
         </tr>
         <tr>
             <td colspan="3" class="no-border"></td>

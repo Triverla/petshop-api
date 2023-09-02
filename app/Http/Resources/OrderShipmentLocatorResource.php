@@ -26,14 +26,14 @@ class OrderShipmentLocatorResource extends JsonResource
             'customer' => $this->resource->user->fullName,
             'amount' => $this->resource->amount,
             'uuid' => $this->resource->uuid,
-            'shipped_at' => $this->resource->shipped_at
+            'shipped_at' => $this->resource->shipped_at,
         ];
     }
 
     private function getProductCategories(array $products): array
     {
         $categories = [];
-        foreach ($products as $product){
+        foreach ($products as $product) {
             $categories[] = Product::findOrFail($product->product)->category->title;
         }
 

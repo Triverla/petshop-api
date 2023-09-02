@@ -4,28 +4,14 @@ namespace App\Http\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use ReflectionMethod;
-use ReflectionParameter;
-
 use function call_user_func;
 use function call_user_func_array;
 
 abstract class Filter
 {
-    /**
-     * The request instance.
-     *
-     * @var Request
-     */
     protected Request $request;
-
-    /**
-     * The builder instance.
-     *
-     * @var Builder
-     */
     protected Builder $builder;
 
     /**
@@ -62,16 +48,21 @@ abstract class Filter
         $this->builder = $builder;
 
         if (empty($this->filters()) && method_exists($this, 'default')) {
-            call_user_func([$this, 'default']);
+            return call_user_func([$this, 'default']);
         }
 
         foreach ($this->filters() as $name => $value) {
             $methodName = Str::camel($name);
             $value = array_filter([$value]);
-            if ($this->shouldCall($methodName, $value)) {
-                call_user_func_array([$this, $methodName], $value);
+
+            if (method_exists($this, $methodName)) {
+                $method = new ReflectionMethod($this, $methodName);
+                if ($method->getNumberOfParameters() > 0 || $value) {
+                    call_user_func_array([$this, $methodName], $value);
+                }
             }
         }
+
         return $this->builder;
     }
 
@@ -83,29 +74,5 @@ abstract class Filter
     public function filters(): array
     {
         return $this->request->all();
-    }
-
-    /**
-     * Make sure the method should be called.
-     *
-     * @param string $methodName
-     * @param array $value
-     * @return bool
-     */
-    protected function shouldCall(string $methodName, array $value): bool
-    {
-        if (!method_exists($this, $methodName)) {
-            return false;
-        }
-
-        $method = new ReflectionMethod($this, $methodName);
-        /** @var ReflectionParameter $parameter */
-        $parameter = Arr::first($method->getParameters());
-
-        if ($value) {
-            return $method->getNumberOfParameters() > 0;
-        }
-
-        return null === $parameter || $parameter->isDefaultValueAvailable();
     }
 }
