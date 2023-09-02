@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\V1\Order;
 
+use App\Rules\AddressRule;
 use App\Rules\JsonRule;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -35,10 +36,7 @@ class CreateOrderRequest extends FormRequest
             ],
             'address' => [
                 'required',
-                new JsonRule([
-                    'billing' => 'required|string',
-                    'shipping' => 'required|string',
-                ]),
+                new AddressRule,
             ],
             'amount' => 'required|numeric',
         ];

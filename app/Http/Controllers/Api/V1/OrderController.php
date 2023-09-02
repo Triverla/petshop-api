@@ -104,7 +104,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Post(
-     *     path="api/v1/order",
+     *     path="api/v1/order/create",
      *     tags={"Orders"},
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
@@ -201,10 +201,10 @@ class OrderController extends Controller
         $order = $user->orders()->create(
             [
                 'products' => json_encode($attributes['products']),
-                'address' => $attributes['address'],
+                'address' => json_encode($attributes['address']),
                 'amount' => $attributes['amount'],
-                'order_status_id' => $status->id,
-                'payment_id' => $payment->id,
+                'order_status_id' => $status->uuid,
+                'payment_id' => $payment->uuid,
             ]
         );
 
@@ -247,6 +247,10 @@ class OrderController extends Controller
      */
     public function show(Order $order): JsonResponse
     {
+        if(!Auth::user()->is_admin && ($order->user_id !== Auth::id())){
+            abort(404, "Order not found");
+        }
+
         return response()->json(new OrderResource($order));
     }
 
@@ -355,10 +359,10 @@ class OrderController extends Controller
         $order->update(
             [
                 'products' => json_encode($attributes['products']),
-                'address' => $attributes['address'],
+                'address' => json_encode($attributes['address']),
                 'amount' => $attributes['amount'],
-                'order_status_id' => $status->id,
-                'payment_id' => $payment->id,
+                'order_status_id' => $status->uuid,
+                'payment_id' => $payment->uuid,
             ]
         );
 

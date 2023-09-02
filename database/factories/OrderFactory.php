@@ -21,10 +21,10 @@ class OrderFactory extends Factory
      */
     public function definition(): array
     {
-        $user = User::whereId(rand(1, 100))->first();
+        $user = User::factory()->create();
         $orderStatus = OrderStatus::all();
         $orderStatusPicked = $orderStatus->random();
-        $payment = Payment::where('id', rand(1, 20))->first();
+        $payment = Payment::factory()->create();
 
         $statuses = ['open' => 'open', 'pending_payment' => 'pending_payment', 'cancelled' => 'cancelled'];
         $numberOfProducts = rand(1, 2);

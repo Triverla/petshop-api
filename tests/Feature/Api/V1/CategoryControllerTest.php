@@ -27,7 +27,7 @@ class CategoryControllerTest extends Base
     public function testCanCreateCategory()
     {
         $this->actingAs($this->buckHillAdmin)->postJson(
-            "api/v1/category",
+            "api/v1/category/create",
             ['title' => 'Test'],
             [
                 'Accept' => "application/json",
