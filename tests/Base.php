@@ -28,7 +28,7 @@ class Base extends TestCase
 
         $this->buckHillAdmin = User::factory()->create([
             'first_name' => 'BuckHillAdmin',
-            'email' => 'test@buckhill.co.uk',
+            'email' => fake()->name.'@buckhill.co.uk',
             'password' => Hash::make('admin'),
             'is_admin' => true,
         ]);
