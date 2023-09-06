@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Admin\UserController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\FileController;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\UserController as NormalUserController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
@@ -64,6 +65,12 @@ Route::group(['middleware' => ['auth:api']], function (): void {
             '{order}/download',
             [OrderController::class, 'download']
         );
+    });
+
+    Route::prefix('file')->group(function () {
+        Route::get('{file}', [FileController::class, 'download']);
+
+        Route::post('upload', [FileController::class, 'upload']);
     });
 });
 
