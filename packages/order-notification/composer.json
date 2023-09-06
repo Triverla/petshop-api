@@ -1,0 +1,42 @@
+{
+    "name": "triverla/order-notification",
+    "description": "A laravel package to keep track of the statuses of the orders",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Triverla\\OrderNotification\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Benaiah Yusuf",
+            "email": "yusufbenaiah@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=8.2.0",
+        "guzzlehttp/guzzle": "^7.8"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.3",
+        "orchestra/testbench": "^8.10"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Triverla\\OrderNotification\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit tests",
+        "test-coverage": "vendor/bin/phpunit tests --coverage-html coverage"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Triverla\\OrderNotification\\OrderNotificationServiceProvider"
+            ]
+        }
+    }
+}
