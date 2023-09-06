@@ -1,4 +1,4 @@
-FROM php:8.1-apache
+FROM php:8.2-apache
 
 RUN apt update && apt install -y nodejs npm libpng-dev zlib1g-dev libxml2-dev libzip-dev libonig-dev zip curl unzip && docker-php-ext-configure gd \
     && pecl install redis \
