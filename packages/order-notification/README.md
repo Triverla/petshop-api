@@ -18,6 +18,13 @@ Set `order-notification.webhook_url` (**required**) to your Microsoft Teams webh
 ORDERS_WEBHOOK_URL=
 ```
 
+## Usage
+use Triverla\OrderNotification\Events\OrderStatusUpdated;
+
+```php
+    event(new OrderStatusUpdated('OrderUUID', 'OrderStatus', now()))
+```
+
 ## Testing
 
 ```bash
