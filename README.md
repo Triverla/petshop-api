@@ -59,6 +59,17 @@ make phpinsights
 make phpstan
 ```
 
+## Swagger Docs
+Swagger docs can be generated using the command below:
+```bash
+make swagger
+```
+
+Api documentations can be accessed on 
+```curl
+http://localhost:8000/api/v1/documentation
+```
+
 ## Tests
 
 ```bash
