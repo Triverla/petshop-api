@@ -9,7 +9,11 @@ git clone https://github.com/Triverla/petshop-api.git
 After successfully cloning repo, Open project in your preferred IDE or text editor and proceed with the following steps <br>
 
 **NB:** This application makes use of **Makefile** to help simplify commands<br>
+
 Step 2: <br>
+Follow the steps in Configuration [Go to Configuration section](#configuration)
+
+Step 3: <br>
 This application was built using **Dockerfile** and **docker-compose** <br>
 You can boot this application using any of the following commands<br>
 **NB:** Remember to start your docker app
@@ -34,7 +38,11 @@ docker exec -t petshop bash -c 'php artisan migrate:fresh --seed'
 The app should be accessible via `http://localhost:8000`.
 
 ## Configuration
-Update your `.env` files with the following details
+Create `.env` file by running the command below
+```bash
+make env
+```
+Then update your `.env` files with the following details
 ```dotenv
 #Jwt
 JWT_SECRET=test_secret
@@ -45,7 +53,7 @@ Add the variable below for Order Notification package
 ```dotenv
 ORDERS_WEBHOOK_URL=https://webhook.site/2b63b8dc-ddf4-4d74-8d53-17f0df0911f1
 ```
-
+Also, update **Database** variables in the env file with your values for docker DB configuration
 
 ## JWT
 The json web token for this application is generated using **firebase/php-jwt**
