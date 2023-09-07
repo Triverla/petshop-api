@@ -9,9 +9,8 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Annotations as OA;
 
-class LoginController extends Controller
+class UserLoginController extends Controller
 {
-
     /**
      * @param AuthService $authService
      */
@@ -21,11 +20,11 @@ class LoginController extends Controller
 
     /**
      * @OA\Post(
-     * path="api/v1/admin/login",
+     * path="api/v1/user/login",
      * summary="Sign in",
      * description="Login by email, password",
      * operationId="authLogin",
-     * tags={"Admin"},
+     * tags={"User"},
      * @OA\RequestBody(
      *    required=true,
      *    description="Pass user credentials",
@@ -50,7 +49,7 @@ class LoginController extends Controller
     {
         $validatedData = $request->validated();
 
-        $data = $this->authService->login($validatedData);
+        $data = $this->authService->login($validatedData, false);
 
         return response()->json($data);
     }

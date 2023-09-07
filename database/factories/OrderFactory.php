@@ -56,7 +56,7 @@ class OrderFactory extends Factory
             ),
             'delivery_fee' => $deliveryFee,
             'amount' => $orderAmount,
-            'shipped_at' => $this->faker->randomElement([null, now(), now()->addDays(3), now()->subDays(2)])
+            'shipped_at' => isset($statuses[$orderStatusPicked->title])  ? null :$this->faker->randomElement([now()->addDay(), now()->addDays(3), now()->subDays(2)])
         ];
     }
 }

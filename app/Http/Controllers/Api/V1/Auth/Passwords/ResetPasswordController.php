@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Auth\Passwords;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Auth\PasswordUpdateRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -11,7 +12,6 @@ use OpenApi\Annotations as OA;
 
 class ResetPasswordController extends Controller
 {
-
     /**
      * @OA\Post(
      *     path="api/v1/user/reset-password-token",
@@ -59,7 +59,7 @@ class ResetPasswordController extends Controller
      *     )
      * )
      */
-    public function __invoke(PasswordUpdateRequest $request)
+    public function __invoke(PasswordUpdateRequest $request): JsonResponse
     {
         $response = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
@@ -73,9 +73,7 @@ class ResetPasswordController extends Controller
             return response()->json(['message' => 'Password has been successfully updated']);
         }
 
-        if ($response === Password::INVALID_TOKEN) {
-            abort(Response::HTTP_BAD_REQUEST, 'Invalid or expired token');
-        }
+        abort_if($response === Password::INVALID_TOKEN, Response::HTTP_BAD_REQUEST, 'Invalid or expired token');
 
         abort(Response::HTTP_BAD_REQUEST, 'Invalid or expired token');
     }

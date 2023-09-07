@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Auth\Passwords;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Auth\ForgotPasswordRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Password;
 use OpenApi\Annotations as OA;
 
@@ -44,7 +45,7 @@ class ForgotPasswordController extends Controller
      *     )
      * )
      */
-    public function __invoke(ForgotPasswordRequest $request)
+    public function __invoke(ForgotPasswordRequest $request): JsonResponse
     {
         $validatedRequest = $request->validated();
 

@@ -24,7 +24,7 @@ class JwtGuard implements Guard
     use GuardHelpers, Macroable;
 
     protected Request $request;
-    private stdClass $token;
+    protected stdClass $token;
 
     public function __construct(UserProvider $provider, Request $request)
     {
@@ -44,17 +44,18 @@ class JwtGuard implements Guard
         }
 
         $requestToken = $this->getTokenFromRequest();
-        if (!$requestToken) {
-            $this->handleMissingToken();
-        }
+
+        abort_if(
+            !$requestToken,
+            Response::HTTP_UNAUTHORIZED,
+            'Missing token. Please provide Bearer Authorization in request header.'
+        );
 
         $token = $this->validateToken($requestToken);
 
-        if (is_null($token)) {
-            $this->abortWithUnauthorizedResponse('Invalid token. Kindly login');
-        }
+        $this->validateJwtExpiryTime($token);
 
-        $this->enforceShortLivedTokens($token);
+        $this->enforceMaxLifetime($token, config('petshop.jwt_max_lifetime'));
 
         $this->token = $token;
         $this->user = $this->provider->retrieveByCredentials(['uuid' => $token->user_id]);
@@ -67,55 +68,40 @@ class JwtGuard implements Guard
         return $this->request->token ?? $this->request->bearerToken();
     }
 
-    private function handleMissingToken()
-    {
-        if (config('app.debug')) {
-            throw new UnexpectedValueException('Missing token. Please provide Bearer Authorization in request header.');
-        }
-    }
-
     private function validateToken($token): ?stdClass
     {
         try {
-            $decodedToken = Token::decodeJwt($token);
-            if (!$this->validateJwtExpiryTime($decodedToken)) {
-                return null;
-            }
-            return $decodedToken;
-        } catch (ExpiredException $e) {
-            return null;
-        } catch (SignatureInvalidException $e) {
-            if (app()->environment('testing')) {
-                throw $e;
-            }
-            return null;
-        } catch (DomainException|InvalidArgumentException|UnexpectedValueException $e) {
-            if (config('app.debug')) {
-                throw $e;
-            }
-            \Log::error($e);
-            return null;
+            $token = Token::decodeJwt($token);
+        } catch (ExpiredException|SignatureInvalidException
+        |DomainException|InvalidArgumentException
+        |UnexpectedValueException $e) {
+            $this->abortWithUnauthorizedResponse('Invalid or Expired token. Kindly login');
         }
+
+        return $token;
     }
 
     private function validateJwtExpiryTime($token): ?bool
     {
-        if (!app()->environment('testing')) {
-            $storedToken = JwtToken::with('user')->currentUser($token->user_id)->first();
-            if (empty($storedToken) || $storedToken->isExpired()) {
-                $this->abortWithUnauthorizedResponse('Token expired, please renew your jwt');
-            }
-        }
+        $storedToken = JwtToken::with('user')->currentUser($token->user_id)->first();
+        abort_if(
+            (empty($storedToken) || $storedToken->isExpired()),
+            Response::HTTP_UNAUTHORIZED,
+            'Token expired, please renew your jwt'
+        );
+
         return true;
     }
 
-    private function enforceShortLivedTokens(stdClass $token): void
+    private function enforceMaxLifetime(stdClass $token, int $maxMinutes): void
     {
-        $maxMinutes = config('petshop.jwt_max_lifetime');
-        if (empty($token->exp) || $token->exp > strtotime("+{$maxMinutes} minutes")) {
-            $validMinutes = Carbon::createFromTimestamp($token->exp)->diffInMinutes();
-            throw new UnexpectedValueException('Token exceeds maximum lifetime. Token is valid for ' . $validMinutes);
-        }
+        abort_if(
+            (empty($token->exp) || $token->exp > strtotime("+{$maxMinutes} minutes")),
+            Response::HTTP_UNAUTHORIZED,
+            'Token exceeds maximum lifetime. Token is valid for ' . Carbon::createFromTimestamp(
+                $token->exp
+            )->diffInMinutes()
+        );
     }
 
     private function abortWithUnauthorizedResponse(string $message): void
@@ -123,4 +109,3 @@ class JwtGuard implements Guard
         abort(Response::HTTP_UNAUTHORIZED, $message);
     }
 }
-
