@@ -20,12 +20,12 @@
     ],
     "paths": {
         "/api/v1": {},
-        "api/v1/dmin/user-listing": {
+        "api/v1/admin/user-listing": {
             "get": {
                 "tags": [
                     "Admin"
                 ],
-                "operationId": "d91c1ddb5dde27c10e1d6301b0ebd3c0",
+                "operationId": "177231694e78ff234274f34d3df8423c",
                 "parameters": [
                     {
                         "name": "page",
@@ -363,7 +363,7 @@
                     "Admin"
                 ],
                 "summary": "Sign in",
-                "description": "Login by email, password, both user and admin uses this endpoint so te behavior will change just on the route name",
+                "description": "Login by email, password",
                 "operationId": "authLogin",
                 "requestBody": {
                     "description": "Pass user credentials",
@@ -404,7 +404,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Invalid email address or password. Please try again"
+                                            "example": "Invalid email address or password."
                                         }
                                     },
                                     "type": "object"
@@ -535,12 +535,70 @@
                 }
             }
         },
-        "categories": {
+        "api/v1/user/login": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Sign in",
+                "description": "Login by email, password",
+                "operationId": "userAuthLogin",
+                "requestBody": {
+                    "description": "Pass user credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "admin@buckhill.co.uk"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "422": {
+                        "description": "Invalid credentials response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid email address or password."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "api/v1/categories": {
             "get": {
                 "tags": [
                     "Categories"
                 ],
-                "operationId": "184f8a413746bb4c41021bf36af80696",
+                "operationId": "734bda14cce9a5f663ad2b9031b5acd8",
                 "parameters": [
                     {
                         "name": "page",
@@ -597,12 +655,12 @@
                 }
             }
         },
-        "category": {
+        "api/v1/category/create": {
             "post": {
                 "tags": [
                     "Categories"
                 ],
-                "operationId": "90259a303f8dead0daa425fc6c3f67ad",
+                "operationId": "f7960f16a7934eac462ebe3044864521",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -646,12 +704,12 @@
                 ]
             }
         },
-        "category/{uuid}": {
+        "api/v1/category/{uuid}": {
             "get": {
                 "tags": [
                     "Categories"
                 ],
-                "operationId": "618623fa986727ba3d7b3f6e80221cb4",
+                "operationId": "606dbb4110a9801bf86127e57d5846b0",
                 "parameters": [
                     {
                         "name": "uuid",
@@ -685,7 +743,7 @@
                 "tags": [
                     "Categories"
                 ],
-                "operationId": "f7bb2be5770a1f7e0c52dd75aba969ae",
+                "operationId": "26c1bf53ed761944b60996e9875bfec5",
                 "parameters": [
                     {
                         "name": "uuid",
@@ -743,7 +801,659 @@
                 "tags": [
                     "Categories"
                 ],
-                "operationId": "93889f5e54cbc406b25ed77592a92fa1",
+                "operationId": "05b8bb058aebdd58fd3c84effb4b4984",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID parameter",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Page not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/file/upload": {
+            "post": {
+                "tags": [
+                    "File"
+                ],
+                "operationId": "2f9ab8aa8c9cd629e47f043a621be29d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "file"
+                                ],
+                                "properties": {
+                                    "file": {
+                                        "type": "file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Page not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/file/{uuid}": {
+            "get": {
+                "tags": [
+                    "File"
+                ],
+                "operationId": "7bf908af965a093c9e7b0a1dd0ddcac7",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID parameter",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Page not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "api/v1/orders": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "operationId": "5f3b9fab00601744125f6451fe484a27",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sortBy",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "desc",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Page not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "api/v1/order/create": {
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "operationId": "bfa27ba7b3e98da57ee69a3042379f8c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "required": [
+                                    "order_status_uuid",
+                                    "payment_uuid",
+                                    "products",
+                                    "address",
+                                    "amount"
+                                ],
+                                "properties": {
+                                    "order_status_uuid": {
+                                        "description": "order status uuid",
+                                        "type": "string"
+                                    },
+                                    "payment_uuid": {
+                                        "description": "payment uuid",
+                                        "type": "string"
+                                    },
+                                    "products": {
+                                        "description": "array of products",
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "product": {
+                                                    "type": "string"
+                                                },
+                                                "quantity": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "example": [
+                                            {
+                                                "product": "string",
+                                                "quantity": 1
+                                            }
+                                        ]
+                                    },
+                                    "address": {
+                                        "description": "shipping and billing address",
+                                        "properties": {
+                                            "shipping": {
+                                                "type": "string"
+                                            },
+                                            "billing": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "amount": {
+                                        "description": "amount",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Page not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "api/v1/order/{uuid}": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "operationId": "a50f4548e74cec9037c7f79b5c18ade8",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID parameter",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Page not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Orders"
+                ],
+                "operationId": "dca1f16b25ec1a92c8df3e6129167b19",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID parameter",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "required": [
+                                    "order_status_uuid",
+                                    "payment_uuid",
+                                    "products",
+                                    "address",
+                                    "amount"
+                                ],
+                                "properties": {
+                                    "order_status_uuid": {
+                                        "description": "order status uuid",
+                                        "type": "string"
+                                    },
+                                    "payment_uuid": {
+                                        "description": "payment uuid",
+                                        "type": "string"
+                                    },
+                                    "products": {
+                                        "description": "array of products",
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "product": {
+                                                    "type": "string"
+                                                },
+                                                "quantity": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "example": [
+                                            {
+                                                "product": "string",
+                                                "quantity": 1
+                                            }
+                                        ]
+                                    },
+                                    "address": {
+                                        "description": "shipping and billing address",
+                                        "properties": {
+                                            "shipping": {
+                                                "type": "string"
+                                            },
+                                            "billing": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "amount": {
+                                        "description": "amount",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Page not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Orders"
+                ],
+                "operationId": "ecefdc1c7441df977374c8aee2cb9308",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID parameter",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Page not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "api/v1/orders/shipment-locator": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "operationId": "5c03cc35be637253d813f065b6f1a943",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sortBy",
+                        "in": "query",
+                        "description": "Sort field",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "desc",
+                        "in": "query",
+                        "description": "Sort direction (true for descending, false for ascending)",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "orderUuid",
+                        "in": "query",
+                        "description": "Order UUID",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "customerUuid",
+                        "in": "query",
+                        "description": "Customer UUID",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dateRange",
+                        "in": "query",
+                        "description": "Date range",
+                        "required": false,
+                        "schema": {
+                            "properties": {
+                                "from": {
+                                    "description": "Start date",
+                                    "type": "string",
+                                    "format": "date"
+                                },
+                                "to": {
+                                    "description": "End date",
+                                    "type": "string",
+                                    "format": "date"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    {
+                        "name": "fixRange",
+                        "in": "query",
+                        "description": "Available values : today, monthly, yearly",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Page not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "api/v1/orders/dashboard": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "operationId": "8bf908760405e4fafd2f0bdcc26b6867",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sortBy",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "desc",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Page not found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "api/v1/orders/{uuid}/download": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "operationId": "4a4a98ee7ff212bd2c948b6f9761b450",
                 "parameters": [
                     {
                         "name": "uuid",

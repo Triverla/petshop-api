@@ -23,7 +23,7 @@ class UserLoginController extends Controller
      * path="api/v1/user/login",
      * summary="Sign in",
      * description="Login by email, password",
-     * operationId="authLogin",
+     * operationId="userAuthLogin",
      * tags={"User"},
      * @OA\RequestBody(
      *    required=true,
