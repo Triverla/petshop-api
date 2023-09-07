@@ -1,0 +1,66 @@
+version: '3.8'
+services:
+    main:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: petshop
+        image: petshop:latest
+        working_dir: /var/www/
+        restart: unless-stopped
+        volumes:
+            - ./:/var/www
+        ports:
+            - 8000:80
+        env_file:
+            - .env
+        depends_on:
+            - db
+        networks:
+            - apinetwork
+
+
+    main_queue:
+        container_name: petshop_queue
+        image: petshop:latest
+        volumes:
+            - ./:/var/www
+        env_file:
+            - .env
+        environment:
+            - CONTAINER_ROLE=queue
+
+    db:
+        platform: linux/x86_64
+        image: mysql:8.0
+        container_name: Database
+        env_file:
+            - .env
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_ROOT: "root"
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - db:/var/lib/mysql
+        ports:
+            - 3306:3306
+        networks:
+            - apinetwork
+    redis:
+        container_name: petshop_redis
+        image: redis:4-alpine
+        ports:
+            - 6375:6379
+        volumes:
+            - redis:/data
+volumes:
+    redis:
+        driver: "local"
+    db:
+        driver: "local"
+
+networks:
+    apinetwork:
+        driver: bridge
