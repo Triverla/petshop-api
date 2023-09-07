@@ -68,5 +68,7 @@ make test
 ## Level 4 Challenge (Order Status Notification)
 The package required for this challenge can be found under `packages/order-notification` directory.
 
+The package is implemented in the **OrderObserver** Class. It sends a notification each time the order status is updated.
+
 You can check the included `README.md` for more info.
 

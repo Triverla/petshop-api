@@ -8,6 +8,7 @@ use App\Http\Requests\File\StoreRequest;
 use App\Models\File;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -63,9 +64,7 @@ class FileController extends Controller
         $validated = $request->validated();
         $file = $validated['file'];
 
-        if (!$file instanceof UploadedFile) {
-            throw new InvalidArgumentException();
-        }
+        abort_if(!$file instanceof UploadedFile, Response::HTTP_BAD_REQUEST, "Invalid file");
 
         $uuid = Str::uuid();
 
