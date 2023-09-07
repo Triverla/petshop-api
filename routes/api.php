@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\UserController;
-use App\Http\Controllers\Api\V1\Auth\UserLoginController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\FileController;
 use App\Http\Controllers\Api\V1\OrderController;
@@ -26,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('admin/login', LoginController::class);
 
 Route::group(['prefix' => 'user'], function (): void {
-    Route::post('login', UserLoginController::class);
+    Route::post('login', LoginController::class);
     Route::post('forgot-password', ForgotPasswordController::class);
     Route::post('reset-password-token', ResetPasswordController::class);
 });

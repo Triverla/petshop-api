@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use ReflectionMethod;
+use function call_user_func;
+use function call_user_func_array;
 
 abstract class Filter
 {
@@ -26,9 +28,9 @@ abstract class Filter
     /**
      * @param string $name
      * @param array $arguments
-     * @return mixed
+     * @return void
      */
-    public function __call(string $name, array $arguments): mixed
+    public function __call(string $name, array $arguments)
     {
         if (method_exists($this->builder, $name)) {
             return call_user_func_array([$this->builder, $name], $arguments);

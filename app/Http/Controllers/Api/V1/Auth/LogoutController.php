@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\JwtToken;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use OpenApi\Annotations as OA;
 
 class LogoutController extends Controller
@@ -39,7 +37,7 @@ class LogoutController extends Controller
      *     )
      * )
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request)
     {
         JwtToken::where('user_id', $request->user()->uuid)->delete();
 

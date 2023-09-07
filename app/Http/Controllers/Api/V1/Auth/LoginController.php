@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Auth\LoginRequest;
 use App\Services\Api\V1\Auth\AuthService;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use OpenApi\Annotations as OA;
 
 class LoginController extends Controller
@@ -44,15 +43,18 @@ class LoginController extends Controller
      *        )
      *     )
      * )
-     * @throws Exception
      */
-    public function __invoke(LoginRequest $request): JsonResponse
+    public function __invoke(LoginRequest $request)
     {
         $validatedData = $request->validated();
 
-        $data = $this->authService->login($validatedData);
+        try {
+            $data = $this->authService->login($validatedData);
 
-        return response()->json($data);
+            return response()->json($data);
+        } catch (Exception $e) {
+            throw new Exception('Unsuccessful Login Attempt');
+        }
     }
 
 }
