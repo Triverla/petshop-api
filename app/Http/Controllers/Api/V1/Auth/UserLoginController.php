@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Auth\LoginRequest;
 use App\Services\Api\V1\Auth\AuthService;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use OpenApi\Annotations as OA;
 
 class UserLoginController extends Controller
@@ -45,7 +46,7 @@ class UserLoginController extends Controller
      * )
      * @throws Exception
      */
-    public function __invoke(LoginRequest $request)
+    public function __invoke(LoginRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
 

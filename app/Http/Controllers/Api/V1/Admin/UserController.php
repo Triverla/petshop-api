@@ -11,6 +11,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\Api\V1\Auth\AuthService;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,7 +28,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="api/v1/dmin/user-listing",
+     *     path="api/v1/admin/user-listing",
      *     tags={"Admin"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
@@ -137,7 +138,7 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function index(Request $request, Paginator $paginator)
+    public function index(Request $request, Paginator $paginator): LengthAwarePaginator
     {
         $query = User::query()->where('is_admin', false);
 
@@ -316,7 +317,7 @@ class UserController extends Controller
      *
      * @throws Throwable
      */
-    public function createUser(CreateUserRequest $request)
+    public function createUser(CreateUserRequest $request): JsonResponse
     {
         $validatedRequest = $request->validated();
         $user = User::create([

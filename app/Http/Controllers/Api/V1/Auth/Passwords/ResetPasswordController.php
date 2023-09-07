@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Auth\Passwords;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Auth\PasswordUpdateRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -59,7 +60,7 @@ class ResetPasswordController extends Controller
      *     )
      * )
      */
-    public function __invoke(PasswordUpdateRequest $request)
+    public function __invoke(PasswordUpdateRequest $request): JsonResponse
     {
         $response = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),

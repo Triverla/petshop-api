@@ -19,11 +19,10 @@ use App\Models\User;
 use Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 use OpenApi\Annotations as OA;
 use Throwable;
 
@@ -32,7 +31,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Get(
-     *     path="api/v1/order",
+     *     path="api/v1/orders",
      *     tags={"Orders"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
@@ -680,7 +679,7 @@ class OrderController extends Controller
 
         $data = [
             'order' => $order,
-            'paymentType' => strtoupper(str_replace('_', ' ', $order->payment->type)),
+            'paymentType' => !empty($order->payment) ? strtoupper(str_replace('_', ' ', $order->payment->type)) : null,
             'productsAndQuantity' => $productsAndQuantity,
             'address' => json_decode($order->address),
             'subtotal' => $subTotal,

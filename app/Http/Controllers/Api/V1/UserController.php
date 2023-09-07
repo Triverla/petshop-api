@@ -135,7 +135,7 @@ class UserController extends Controller
      *
      * @throws Throwable
      */
-    public function createUser(CreateUserRequest $request)
+    public function createUser(CreateUserRequest $request): JsonResponse
     {
         $validatedRequest = $request->validated();
         $user = User::create([

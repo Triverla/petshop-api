@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class AuthService
 {
 
-    public function login(array $data, $isAdmin = true)
+    public function login(array $data, bool $isAdmin = true): array
     {
         if (!Auth::attempt($data)) {
             throw new Exception('Invalid login credentials');
@@ -22,11 +22,11 @@ class AuthService
         $user = Auth::guard()->user();
 
         if($isAdmin && !$user->is_admin){
-            abort(Response::HTTP_FORBIDDEN, 'Unauthorized');
+            abort(Response::HTTP_UNAUTHORIZED, 'Unauthorized');
         }
 
         if(!$isAdmin && $user->is_admin){
-            abort(Response::HTTP_FORBIDDEN, 'Unauthorized');
+            abort(Response::HTTP_UNAUTHORIZED, 'Unauthorized');
         }
 
         $device = substr(request()->userAgent() ?? '', 0, 255);
@@ -37,6 +37,7 @@ class AuthService
             'iss' => config('app.url'),
             'exp' => Carbon::now()->addMinutes(config('petshop.jwt_max_lifetime'))->getTimestamp(),
         ]);
+
         $tokenExpiry = Carbon::createFromTimestamp(Token::decodeJwt($token)->exp);
         $storeJWT = $this->storeJWT($token);
 
@@ -48,10 +49,16 @@ class AuthService
         ];
     }
 
-    public function storeJWT(string $token)
+    /**
+     * @param string $token
+     * @return mixed
+     * @throws Exception
+     */
+    public function storeJWT(string $token): mixed
     {
         $tokenExpiry = Carbon::createFromTimestamp(Token::decodeJwt($token)->exp);
-        $userId = auth()->user()->uuid;
+
+        $userId = Auth::id();
 
         JwtToken::where('user_id', $userId)->delete();
 

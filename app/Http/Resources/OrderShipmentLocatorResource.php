@@ -34,7 +34,11 @@ class OrderShipmentLocatorResource extends JsonResource
     {
         $categories = [];
         foreach ($products as $product) {
-            $categories[] = Product::findOrFail($product->product)->category->title;
+            $singleProduct = Product::find($product->product);
+            if(!$singleProduct){
+                continue;
+            }
+            $categories[] = $singleProduct->category->title;
         }
 
         return $categories;

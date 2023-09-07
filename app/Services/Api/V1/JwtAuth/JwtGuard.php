@@ -14,6 +14,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 use stdClass;
@@ -54,7 +55,7 @@ class JwtGuard implements Guard
             $this->abortWithUnauthorizedResponse('Invalid token. Kindly login');
         }
 
-        $this->enforceShortLivedTokens($token);
+        $this->enforceMaxLifetime($token, config('petshop.jwt_max_lifetime'));
 
         $this->token = $token;
         $this->user = $this->provider->retrieveByCredentials(['uuid' => $token->user_id]);
@@ -81,37 +82,28 @@ class JwtGuard implements Guard
             if (!$this->validateJwtExpiryTime($decodedToken)) {
                 return null;
             }
+
             return $decodedToken;
-        } catch (ExpiredException $e) {
-            return null;
-        } catch (SignatureInvalidException $e) {
-            if (app()->environment('testing')) {
-                throw $e;
-            }
+        } catch (ExpiredException|SignatureInvalidException $e) {
             return null;
         } catch (DomainException|InvalidArgumentException|UnexpectedValueException $e) {
-            if (config('app.debug')) {
-                throw $e;
-            }
-            \Log::error($e);
+            Log::error($e);
             return null;
         }
     }
 
     private function validateJwtExpiryTime($token): ?bool
     {
-        if (!app()->environment('testing')) {
-            $storedToken = JwtToken::with('user')->currentUser($token->user_id)->first();
-            if (empty($storedToken) || $storedToken->isExpired()) {
-                $this->abortWithUnauthorizedResponse('Token expired, please renew your jwt');
-            }
+        $storedToken = JwtToken::with('user')->currentUser($token->user_id)->first();
+        if (empty($storedToken) || $storedToken->isExpired()) {
+            $this->abortWithUnauthorizedResponse('Token expired, please renew your jwt');
         }
+
         return true;
     }
 
-    private function enforceShortLivedTokens(stdClass $token): void
+    private function enforceMaxLifetime(stdClass $token, int $maxMinutes): void
     {
-        $maxMinutes = config('petshop.jwt_max_lifetime');
         if (empty($token->exp) || $token->exp > strtotime("+{$maxMinutes} minutes")) {
             $validMinutes = Carbon::createFromTimestamp($token->exp)->diffInMinutes();
             throw new UnexpectedValueException('Token exceeds maximum lifetime. Token is valid for ' . $validMinutes);
