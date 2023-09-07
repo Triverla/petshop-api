@@ -11,7 +11,6 @@ use OpenApi\Annotations as OA;
 
 class UserLoginController extends Controller
 {
-
     /**
      * @param AuthService $authService
      */

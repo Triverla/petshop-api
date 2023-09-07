@@ -14,7 +14,6 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 use stdClass;
@@ -73,7 +72,9 @@ class JwtGuard implements Guard
     {
         try {
             $token = Token::decodeJwt($token);
-        } catch (ExpiredException|SignatureInvalidException|DomainException|InvalidArgumentException|UnexpectedValueException $e) {
+        } catch (ExpiredException|SignatureInvalidException
+        |DomainException|InvalidArgumentException
+        |UnexpectedValueException $e) {
             $this->abortWithUnauthorizedResponse('Invalid or Expired token. Kindly login');
         }
 
@@ -108,4 +109,3 @@ class JwtGuard implements Guard
         abort(Response::HTTP_UNAUTHORIZED, $message);
     }
 }
-

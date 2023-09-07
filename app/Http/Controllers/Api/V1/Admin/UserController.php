@@ -155,7 +155,7 @@ class UserController extends Controller
      *         in="path",
      *         description="UUID parameter",
      *         required=true,
-     *         @OA\Schema(type="string")
+     *         @OA\Schema(type="string"),
      *     ),
      *     @OA\RequestBody(
      *          required=true,

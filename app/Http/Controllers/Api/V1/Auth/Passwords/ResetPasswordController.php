@@ -12,7 +12,6 @@ use OpenApi\Annotations as OA;
 
 class ResetPasswordController extends Controller
 {
-
     /**
      * @OA\Post(
      *     path="api/v1/user/reset-password-token",
