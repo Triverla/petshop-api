@@ -232,6 +232,8 @@ class UserController extends Controller
      */
     public function update(User $user, UpdateUserRequest $request): JsonResponse
     {
+        abort_if($user->is_admin, Response::HTTP_FORBIDDEN, 'User cannot be edited');
+
         $attributes = $request->safe()->all();
 
         $user->update($attributes);

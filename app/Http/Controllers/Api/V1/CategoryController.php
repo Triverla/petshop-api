@@ -6,10 +6,10 @@ use App\Contracts\Paginator;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Category\CategoryRequest;
 use App\Models\Category;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Pagination\LengthAwarePaginator;
 use OpenApi\Annotations as OA;
 use Str;
 use Throwable;
@@ -18,7 +18,7 @@ class CategoryController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="categories",
+     *     path="api/v1/categories",
      *     tags={"Categories"},
      *     @OA\Parameter(
      *         name="page",
@@ -139,7 +139,7 @@ class CategoryController extends Controller
 
     /**
      * @OA\Get(
-     *     path="category/{uuid}",
+     *     path="api/v1/category/{uuid}",
      *     tags={"Categories"},
      *     @OA\Parameter(
      *         name="uuid",
@@ -177,7 +177,7 @@ class CategoryController extends Controller
 
     /**
      * @OA\Put(
-     *     path="category/{uuid}",
+     *     path="api/v1/category/{uuid}",
      *     tags={"Categories"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
@@ -238,7 +238,7 @@ class CategoryController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="category/{uuid}",
+     *     path="api/v1/category/{uuid}",
      *     tags={"Categories"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(

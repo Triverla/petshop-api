@@ -74,9 +74,7 @@ class ResetPasswordController extends Controller
             return response()->json(['message' => 'Password has been successfully updated']);
         }
 
-        if ($response === Password::INVALID_TOKEN) {
-            abort(Response::HTTP_BAD_REQUEST, 'Invalid or expired token');
-        }
+        abort_if($response === Password::INVALID_TOKEN, Response::HTTP_BAD_REQUEST, 'Invalid or expired token');
 
         abort(Response::HTTP_BAD_REQUEST, 'Invalid or expired token');
     }

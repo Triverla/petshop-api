@@ -12,22 +12,14 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthService
 {
-
     public function login(array $data, bool $isAdmin = true): array
     {
-        if (!Auth::attempt($data)) {
-            throw new Exception('Invalid login credentials');
-        }
+        abort_if(!Auth::attempt($data), Response::HTTP_UNPROCESSABLE_ENTITY, 'Invalid login credentials');
 
         $user = Auth::guard()->user();
 
-        if($isAdmin && !$user->is_admin){
-            abort(Response::HTTP_UNAUTHORIZED, 'Unauthorized');
-        }
-
-        if(!$isAdmin && $user->is_admin){
-            abort(Response::HTTP_UNAUTHORIZED, 'Unauthorized');
-        }
+        abort_if(($isAdmin && !$user->is_admin), Response::HTTP_UNAUTHORIZED, 'Unauthorized');
+        abort_if((!$isAdmin && $user->is_admin), Response::HTTP_UNAUTHORIZED, 'Unauthorized');
 
         $device = substr(request()->userAgent() ?? '', 0, 255);
 

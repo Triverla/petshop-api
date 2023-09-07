@@ -6,8 +6,7 @@ use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Firebase\JWT\SignatureInvalidException;
-use http\Exception\UnexpectedValueException;
-use stdClass;
+use UnexpectedValueException;
 
 class Token
 {
