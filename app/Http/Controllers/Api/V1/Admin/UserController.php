@@ -324,7 +324,7 @@ class UserController extends Controller
             'last_name' => $validatedRequest['last_name'],
             'email' => $validatedRequest['email'],
             'password' => Hash::make($validatedRequest['password']),
-            'is_admin' => $request->has('is_admin') ? $validatedRequest['is_admin'] : false,
+            'is_admin' => $request->has('is_admin') ? $validatedRequest['is_admin'] : true,
             'is_marketing' => $request->has('is_marketing') ? $validatedRequest['is_marketing'] : false,
         ]);
 

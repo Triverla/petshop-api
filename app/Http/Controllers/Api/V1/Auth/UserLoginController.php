@@ -8,7 +8,7 @@ use App\Services\Api\V1\Auth\AuthService;
 use Exception;
 use OpenApi\Annotations as OA;
 
-class LoginController extends Controller
+class UserLoginController extends Controller
 {
 
     /**
@@ -20,11 +20,11 @@ class LoginController extends Controller
 
     /**
      * @OA\Post(
-     * path="api/v1/admin/login",
+     * path="api/v1/user/login",
      * summary="Sign in",
      * description="Login by email, password",
      * operationId="authLogin",
-     * tags={"Admin"},
+     * tags={"User"},
      * @OA\RequestBody(
      *    required=true,
      *    description="Pass user credentials",
@@ -43,12 +43,13 @@ class LoginController extends Controller
      *        )
      *     )
      * )
+     * @throws Exception
      */
     public function __invoke(LoginRequest $request)
     {
         $validatedData = $request->validated();
 
-        $data = $this->authService->login($validatedData);
+        $data = $this->authService->login($validatedData, false);
 
         return response()->json($data);
     }

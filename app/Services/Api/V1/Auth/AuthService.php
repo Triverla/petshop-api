@@ -6,18 +6,28 @@ use App\Helpers\Token;
 use App\Models\JwtToken;
 use Carbon\Carbon;
 use Exception;
+use http\Exception\UnexpectedValueException;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class AuthService
 {
 
-    public function login(array $data)
+    public function login(array $data, $isAdmin = true)
     {
         if (!Auth::attempt($data)) {
             throw new Exception('Invalid login credentials');
         }
 
         $user = Auth::guard()->user();
+
+        if($isAdmin && !$user->is_admin){
+            abort(Response::HTTP_FORBIDDEN, 'Unauthorized');
+        }
+
+        if(!$isAdmin && $user->is_admin){
+            abort(Response::HTTP_FORBIDDEN, 'Unauthorized');
+        }
 
         $device = substr(request()->userAgent() ?? '', 0, 255);
 
