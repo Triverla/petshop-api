@@ -2,7 +2,6 @@ up:
 	docker-compose \
 		-f docker-compose.yml \
 		up -d --build --remove-orphans
-		docker exec -it petshop bash -c "cp .env.example .env"
 		docker exec -t petshop bash -c 'php artisan migrate:fresh --seed'
 
 down:
@@ -36,4 +35,4 @@ test:
 	docker exec -it petshop bash -c "php artisan test"
 
 env:
-	docker exec -it petshop bash -c "cp .env.example .env"
+	cp .env.example .env
