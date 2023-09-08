@@ -2,6 +2,10 @@ up:
 	docker-compose \
 		-f docker-compose.yml \
 		up -d --build --remove-orphans
+		docker exec -t petshop bash -c 'COMPOSER_MEMORY_LIMIT=-1 composer install'
+		docker exec -t petshop bash -c 'php artisan key:generate'
+		docker exec -t petshop bash -c 'php artisan storage:link'
+		docker exec -t petshop bash -c 'php artisan optimize'
 		docker exec -t petshop bash -c 'php artisan migrate:fresh --seed'
 
 down:

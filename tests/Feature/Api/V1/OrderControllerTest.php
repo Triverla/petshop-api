@@ -8,6 +8,7 @@ use App\Models\OrderStatus;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
+use Config;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\Base;
@@ -148,6 +149,7 @@ class OrderControllerTest extends Base
             'amount' => $this->faker->randomFloat(2, 10, 100),
         ];
 
+        Config::set('order-notification.webhook_url', 'https://webhook.site/2b63b8dc-ddf4-4d74-8d53-17f0df0911f1');
         $this->actingAs($this->user)->putJson('/api/v1/order/' . $this->userOrder->uuid, $data, [
             'Accept' => "application/json",
             'Authorization' => 'Bearer ' . $this->jwtUserToken
