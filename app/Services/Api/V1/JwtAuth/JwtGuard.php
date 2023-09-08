@@ -86,7 +86,7 @@ class JwtGuard implements Guard
         $storedToken = JwtToken::with('user')->currentUser($token->user_id)->first();
 
         abort_if(
-            (!app()->environment('testing') && (empty($storedToken) || $storedToken->isExpired())),
+            (!app()->runningInConsole() && (empty($storedToken) || $storedToken->isExpired())),
             Response::HTTP_UNAUTHORIZED,
             'Token expired, please renew your jwt'
         );

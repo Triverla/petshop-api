@@ -4,9 +4,15 @@ A simple laravel package that provides an OrderStatusUpdated event and a listene
 
 ## Installation
 
-This package is not an actual published package.
+This package is not an actual published package.<br>
 
-Once package is installed, Laravel will auto-detect this package and will register the provided Service Provider.
+To install, `cd` into `packages/order-notification` folder and run
+
+```bash
+composer install
+```
+
+Once package is installed, Laravel will auto-detect this package and will register the provided Service Provider.<br>
 
 The Service Provider binds by default a simple Microsoft Teams `MessageCard` as the payload to the webhook.
 
