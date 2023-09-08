@@ -18,7 +18,7 @@ class OrderObserver
                 new OrderStatusUpdated(
                     $order->uuid,
                     $order->orderStatus->title,
-                    Carbon::createFromTimestamp($order->getCreatedAtColumn())
+                    Carbon::parse($order->created_at)->toDateTime()
                 )
             );
         }

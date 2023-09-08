@@ -49,8 +49,4 @@ RUN chown -R www-data:www-data /var/www
 
 RUN a2enmod rewrite
 
-RUN php artisan storage:link
-
-RUN php artisan optimize
-
 CMD ["/usr/local/bin/start"]
